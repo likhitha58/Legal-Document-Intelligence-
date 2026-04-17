@@ -1,0 +1,90 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Large Data Files (Output)
+*.npy
+*.npz
+*.csv
+*.json
+legal_data_cleaned.csv
+legal_data_cleaned.json
+df_final_with_nlp.json
+chunk_embeddings.npy
+sample_legal_contract.pdf
+
+# Reports & Logs
+*.log
+*.md~
+ner_extraction_report.json
+embedding_evaluation_report.md
+nlp_model_config.json
+
+# Generated Plots
+plot*.png
+*.png
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Models & Checkpoints
+models/
+*.bin
+*.pt
+*.pth
+
+
+data/data.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
