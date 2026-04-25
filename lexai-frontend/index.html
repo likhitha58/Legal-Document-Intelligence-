@@ -1,272 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LexAI — Legal Document Intelligence System</title>
-  
-  <!-- Bootstrap 5.3 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link href="css/styles.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexAI | Intelligent Legal Document Analysis</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
-<body class="page-fade">
-
-  <!-- 1.1 Navbar -->
-  <nav class="navbar navbar-expand-lg topbar marketing-nav sticky-top">
+<body>
+    <div class="glass-bg"></div>
     <div class="container">
-      <a class="navbar-brand playfair d-flex align-items-center gap-2" href="index.html" style="color: var(--primary); font-weight: 700;">
-        <img src="assets/logo.svg" alt="LexAI Logo" width="28" height="28" class="text-primary">
-        LexAI
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-          <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
-          <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-        </ul>
-        <div class="d-flex gap-3">
-          <a href="login.html" class="btn btn-outline-primary px-4">Login</a>
-          <a href="register.html" class="btn btn-primary px-4 btn-accent">Get Started Free</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- 1.2 Hero Section -->
-  <section class="hero-section text-center text-lg-start">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-5 mb-lg-0 pe-lg-5">
-          <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-4" style="font-size:0.9rem;">
-            🤖 AI-Powered Legal Analysis
-          </span>
-          <h1 class="hero-heading">Understand Any Legal Contract in Minutes</h1>
-          <p class="lead text-muted mb-5">
-            LexAI reads, analyzes, and answers questions about your legal documents using state-of-the-art AI — so your team can focus on what matters.
-          </p>
-          <div class="d-flex flex-wrap gap-3 mb-4 justify-content-center justify-content-lg-start">
-            <a href="register.html" class="btn btn-primary btn-lg">Upload Your First Document →</a>
-            <a href="#" class="btn btn-outline-primary btn-lg">Watch Demo</a>
-          </div>
-          <p class="small text-muted fw-bold">
-            <i class="bi bi-file-earmark-check text-success"></i> 510+ Contracts Analyzed &nbsp;|&nbsp; 
-            <i class="bi bi-tag text-accent"></i> 38 Clause Types &nbsp;|&nbsp; 
-            <i class="bi bi-bullseye text-primary"></i> 99.2% Accuracy
-          </p>
-        </div>
-        <div class="col-lg-6">
-          <div class="hero-mockup">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <div class="spinner-grow text-primary spinner-grow-sm" role="status"></div>
-              <span class="fw-bold text-primary">Analyzing "Software_License.pdf"</span>
+        <header>
+            <div class="logo">
+                <span class="icon">⚖️</span>
+                <h1>LexAI</h1>
             </div>
-            <div class="card p-3 mb-3 border-0 shadow-sm">
-              <span class="badge bg-success bg-opacity-10 text-success mb-2" style="width: fit-content">Confidentiality Clause Detected (98%)</span>
-              <p class="small mb-0">"Each party agrees to maintain the confidentiality of the other party's proprietary information..."</p>
+            <div class="status-badge" id="backend-status">
+                <span class="dot"></span> Backend: <span id="status-text">Connecting...</span>
             </div>
-            <div class="card p-3 border-0 shadow-sm chat-bubble-ai mb-0" style="width:90%">
-              <span class="fw-bold d-block mb-1">🤖 LexAI:</span>
-              <p class="small mb-0">The governing law for this contract is California, United States. Dispute resolution is set in San Francisco County.</p>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h2>Precision Legal Intelligence</h2>
+                <p>Query your contracts with AI-powered semantic search and RAG technology.</p>
+            </section>
+
+            <div class="chat-container">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message system">
+                        <p>Welcome to LexAI. Ask me anything about the loaded contracts.</p>
+                    </div>
+                </div>
+                
+                <div class="input-area">
+                    <input type="text" id="query-input" placeholder="e.g., What are the termination conditions?" autocomplete="off">
+                    <button id="send-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- 1.3 Features Section -->
-  <section id="features" class="features-section bg-main">
-    <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="playfair" style="color: var(--primary); font-size: 2.5rem;">Everything Your Legal Team Needs</h2>
-        <p class="text-muted">Powerful features to streamline your legal review process.</p>
-      </div>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm card-hover p-4">
-            <div class="feature-icon-box"><i class="bi bi-file-earmark-arrow-up"></i></div>
-            <h5 class="fw-bold mt-3">Document Upload</h5>
-            <p class="text-muted small">Drag and drop PDFs, get instant text extraction with OCR support.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm card-hover p-4">
-            <div class="feature-icon-box" style="background: var(--success)"><i class="bi bi-search"></i></div>
-            <h5 class="fw-bold mt-3">Clause Detection</h5>
-            <p class="text-muted small">Automatically identifies 38 legal clause types including termination, confidentiality, and indemnification.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm card-hover p-4">
-            <div class="feature-icon-box" style="background: var(--accent)"><i class="bi bi-chat-quote"></i></div>
-            <h5 class="fw-bold mt-3">AI Q&A</h5>
-            <p class="text-muted small">Ask any question in plain English. Get precise answers with cited contract sources.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm card-hover p-4">
-            <div class="feature-icon-box" style="background: #7B2FC0"><i class="bi bi-tags"></i></div>
-            <h5 class="fw-bold mt-3">Named Entity Recognition</h5>
-            <p class="text-muted small">Extracts parties, dates, locations, and organizations automatically.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm card-hover p-4">
-            <div class="feature-icon-box" style="background: var(--danger)"><i class="bi bi-bar-chart-line"></i></div>
-            <h5 class="fw-bold mt-3">Relevance Scores</h5>
-            <p class="text-muted small">Every answer comes with source documents and semantic relevance scores.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 border-0 shadow-sm card-hover p-4">
-            <div class="feature-icon-box" style="background: #1A7A8A"><i class="bi bi-clock-history"></i></div>
-            <h5 class="fw-bold mt-3">Document History</h5>
-            <p class="text-muted small">All your documents and queries are saved for future reference.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+            <section class="metadata-panel" id="metadata-panel" style="display: none;">
+                <h3>Source Excerpts</h3>
+                <div id="sources-list" class="sources-list"></div>
+            </section>
+        </main>
 
-  <!-- 1.4 How It Works Section -->
-  <section id="how-it-works" class="py-5 bg-white">
-    <div class="container py-5">
-      <h2 class="text-center playfair mb-5" style="color: var(--primary); font-size: 2.5rem;">How It Works</h2>
-      <div class="row position-relative z-1">
-        <div class="col-md-3 timeline-step mb-4 mb-md-0">
-          <div class="timeline-icon">1</div>
-          <h5 class="fw-bold">Upload</h5>
-          <p class="text-muted small px-3">Drop your PDF into the secure portal.</p>
-        </div>
-        <div class="col-md-3 timeline-step mb-4 mb-md-0">
-          <div class="timeline-icon">2</div>
-          <h5 class="fw-bold">Extract</h5>
-          <p class="text-muted small px-3">AI reads & chunks the text instantly.</p>
-        </div>
-        <div class="col-md-3 timeline-step mb-4 mb-md-0">
-          <div class="timeline-icon">3</div>
-          <h5 class="fw-bold">Analyze</h5>
-          <p class="text-muted small px-3">Clauses detected, entities extracted.</p>
-        </div>
-        <div class="col-md-3 timeline-step">
-          <div class="timeline-icon">4</div>
-          <h5 class="fw-bold">Query</h5>
-          <p class="text-muted small px-3">Ask questions, get answers with sources.</p>
-        </div>
-      </div>
+        <footer>
+            <p>&copy; 2026 Legal Document Intelligence System. Powered by Gemini & FAISS.</p>
+        </footer>
     </div>
-  </section>
 
-  <!-- 1.5 Testimonial Section -->
-  <section class="py-5 bg-main">
-    <div class="container py-5">
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm p-4 h-100">
-            <div class="text-accent mb-3">⭐⭐⭐⭐⭐</div>
-            <p class="fst-italic">"LexAI has cut our contract review time by 60%. The clause detection is incredibly accurate."</p>
-            <div class="d-flex align-items-center mt-auto">
-              <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">SC</div>
-              <div>
-                <h6 class="mb-0 fw-bold">Sarah Chen</h6>
-                <small class="text-muted">Corporate Counsel</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm p-4 h-100">
-            <div class="text-accent mb-3">⭐⭐⭐⭐⭐</div>
-            <p class="fst-italic">"The Q&A feature is a game-changer. We can find governing law and payment terms in seconds."</p>
-            <div class="d-flex align-items-center mt-auto">
-              <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">MT</div>
-              <div>
-                <h6 class="mb-0 fw-bold">Michael Torres</h6>
-                <small class="text-muted">Legal Tech Director</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card border-0 shadow-sm p-4 h-100">
-            <div class="text-accent mb-3">⭐⭐⭐⭐⭐</div>
-            <p class="fst-italic">"It handles complex, scanned PDFs with ease thanks to the built-in OCR. Highly recommended."</p>
-            <div class="d-flex align-items-center mt-auto">
-              <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">PN</div>
-              <div>
-                <h6 class="mb-0 fw-bold">Priya Nair</h6>
-                <small class="text-muted">Contract Manager</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 1.6 CTA Banner -->
-  <section class="cta-banner">
-    <div class="container">
-      <h2 class="playfair mb-3">Start Analyzing Legal Documents Today</h2>
-      <p class="lead mb-4 text-white-50">Join hundreds of legal professionals using LexAI to streamline their workflows.</p>
-      <a href="register.html" class="btn btn-accent btn-lg px-5">Get Started Free →</a>
-    </div>
-  </section>
-
-  <!-- 1.7 Footer -->
-  <footer class="bg-white py-5 border-top">
-    <div class="container">
-      <div class="row mb-4">
-        <div class="col-md-4 mb-4 mb-md-0">
-          <a class="navbar-brand playfair d-flex align-items-center gap-2 mb-3" href="#" style="color: var(--primary); font-size:1.5rem; font-weight: 700;">
-            <img src="assets/logo.svg" alt="LexAI Logo" width="30" height="30" class="text-primary">
-            LexAI
-          </a>
-          <p class="text-muted small">Legal Intelligence Platform.</p>
-        </div>
-        <div class="col-md-2 offset-md-2">
-          <h6 class="fw-bold mb-3">Product</h6>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Features</a></li>
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Pricing</a></li>
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Security</a></li>
-          </ul>
-        </div>
-        <div class="col-md-2">
-          <h6 class="fw-bold mb-3">Resources</h6>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Documentation</a></li>
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">API</a></li>
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Blog</a></li>
-          </ul>
-        </div>
-        <div class="col-md-2">
-          <h6 class="fw-bold mb-3">Company</h6>
-          <ul class="list-unstyled small">
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">About Us</a></li>
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Careers</a></li>
-            <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="text-center pt-4 border-top text-muted small">
-        © 2025 LexAI. All rights reserved.
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap 5.3 JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Custom JS -->
-  <script src="js/app.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

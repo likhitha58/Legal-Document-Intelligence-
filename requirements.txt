@@ -1,0 +1,12 @@
+flask
+flask-cors
+pandas
+numpy
+tqdm
+spacy
+sentence-transformers
+faiss-cpu
+transformers
+google-generativeai
+python-dotenv
+torch
