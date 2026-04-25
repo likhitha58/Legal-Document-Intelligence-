@@ -2,9 +2,14 @@ import os
 import sys
 import json
 import time
+import re
 import numpy as np
 import pandas as pd
 import faiss
+import fitz
+import spacy
+from uuid import uuid4
+from collections import Counter
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from pathlib import Path
@@ -69,6 +74,53 @@ CONFIG_PATH = "../nlp_model_config.json"
 
 # Global variables for the pipeline
 rag_pipeline = None
+ner_model = None
+uploaded_docs = {}
+
+def clean_text(text):
+    if not text:
+        return ""
+    return re.sub(r"\s+", " ", text).strip()
+
+def chunk_text_chars(text, size=500, overlap=50):
+    if not text:
+        return []
+    chunks = []
+    start = 0
+    step = max(1, size - overlap)
+    text_len = len(text)
+    while start < text_len:
+        chunk = text[start:start + size].strip()
+        if chunk:
+            chunks.append(chunk)
+        if start + size >= text_len:
+            break
+        start += step
+    return chunks
+
+def extract_entities(text, nlp):
+    doc = nlp(text)
+    entities = []
+    counts = Counter()
+    texts = {}
+    for ent in doc.ents:
+        entities.append({
+            "text": ent.text,
+            "label": ent.label_,
+            "start": ent.start_char,
+            "end": ent.end_char
+        })
+        counts[ent.label_] += 1
+        if ent.label_ not in texts:
+            texts[ent.label_] = []
+        texts[ent.label_].append(ent.text)
+    return entities, dict(counts), texts
+
+def get_ner_model():
+    global ner_model
+    if ner_model is None:
+        ner_model = spacy.load("en_core_web_sm")
+    return ner_model
 
 def init_rag():
     global rag_pipeline
@@ -156,15 +208,116 @@ def query():
     
     data = request.json
     question = data.get("question")
+    doc_id = data.get("doc_id")
     if not question:
         return jsonify({"error": "No question provided"}), 400
     
     try:
-        result = rag_pipeline.query(question)
+        if doc_id:
+            doc_data = uploaded_docs.get(doc_id)
+            if not doc_data:
+                return jsonify({"error": "Invalid doc_id or uploaded document expired"}), 404
+
+            doc_chunks_df = pd.DataFrame(doc_data["chunks"])
+            doc_searcher = SemanticSearch(
+                doc_data["index"],
+                doc_chunks_df,
+                rag_pipeline.searcher.embed_model,
+                doc_data.get("embeddings_norm")
+            )
+            doc_rag = RAGPipeline(doc_searcher, rag_pipeline.llm_fn, top_k=rag_pipeline.top_k)
+            result = doc_rag.query(question)
+        else:
+            result = rag_pipeline.query(question)
+
         # Manually serialize to handle numpy types if json_encoder doesn't catch everything
         return json.dumps(result, cls=CustomJSONEncoder), 200, {'Content-Type': 'application/json'}
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route("/api/upload", methods=["POST"])
+def upload_pdf():
+    global rag_pipeline
+
+    if not rag_pipeline:
+        if not init_rag():
+            return jsonify({"error": "RAG pipeline not initialized. Make sure data is processed."}), 500
+
+    if "file" not in request.files:
+        return jsonify({"error": "No file provided"}), 400
+
+    file = request.files["file"]
+    if not file or not file.filename:
+        return jsonify({"error": "No file provided"}), 400
+
+    if not file.filename.lower().endswith(".pdf"):
+        return jsonify({"error": "Only PDF files are supported"}), 400
+
+    try:
+        pdf_bytes = file.read()
+        pdf_doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        pages_text = [page.get_text("text") for page in pdf_doc]
+        pdf_doc.close()
+        extracted_text = clean_text("\n".join(pages_text))
+    except Exception:
+        return jsonify({"error": "Could not extract text from PDF"}), 400
+
+    if not extracted_text:
+        return jsonify({"error": "Could not extract text from PDF"}), 400
+
+    chunks = chunk_text_chars(extracted_text, size=500, overlap=50)
+    if not chunks:
+        return jsonify({"error": "Could not extract text from PDF"}), 400
+
+    nlp = get_ner_model()
+    doc_id = str(uuid4())
+    doc_name = file.filename
+
+    chunk_records = []
+    for idx, chunk in enumerate(chunks):
+        entities, ent_counts, ent_texts = extract_entities(chunk, nlp)
+        important_labels = {"ORG", "PERSON", "DATE", "GPE", "LOC", "FAC"}
+        filtered_entities = [e for e in entities if e["label"] in important_labels]
+        filtered_counts = {k: v for k, v in ent_counts.items() if k in important_labels}
+        filtered_texts = {k: v for k, v in ent_texts.items() if k in important_labels}
+
+        chunk_records.append({
+            "doc_id": doc_id,
+            "contract_name": doc_name,
+            "chunk_idx": idx,
+            "chunk_text": chunk,
+            "ner_entities": filtered_entities,
+            "entity_counts": filtered_counts,
+            "entity_texts": filtered_texts,
+            "clauses_detected": []
+        })
+
+    try:
+        embeddings = rag_pipeline.searcher.embed_model.encode(
+            [c["chunk_text"] for c in chunk_records],
+            convert_to_numpy=True
+        ).astype("float32")
+        embeddings_norm = embeddings.copy()
+        faiss.normalize_L2(embeddings_norm)
+
+        doc_index = faiss.IndexIDMap(faiss.IndexFlatIP(384))
+        doc_index.add_with_ids(embeddings_norm, np.arange(len(chunk_records), dtype=np.int64))
+    except Exception as e:
+        return jsonify({"error": f"Failed to index uploaded PDF: {str(e)}"}), 500
+
+    uploaded_docs[doc_id] = {
+        "index": doc_index,
+        "chunks": chunk_records,
+        "name": doc_name,
+        "embeddings_norm": embeddings_norm
+    }
+
+    return jsonify({
+        "doc_id": doc_id,
+        "doc_name": doc_name,
+        "chunk_count": len(chunk_records),
+        "status": "ready"
+    })
 
 @app.route("/api/status")
 def status():
