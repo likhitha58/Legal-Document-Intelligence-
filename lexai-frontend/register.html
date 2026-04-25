@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - LexAI</title>
+  
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="page-fade">
+
+  <div class="split-layout">
+    <div class="split-left">
+      <a class="playfair d-flex align-items-center gap-2 mb-5" href="index.html" style="color: #fff; font-size:2rem; font-weight: 700; text-decoration: none;">
+        <img src="assets/logo.svg" alt="LexAI Logo" width="40" height="40" class="text-white">
+        LexAI
+      </a>
+      <h2 class="playfair mb-4">Legal Intelligence Platform</h2>
+      <ul class="list-unstyled lead fs-5">
+        <li class="mb-3"><i class="bi bi-shield-check text-accent me-2"></i> Secure Document Storage</li>
+        <li class="mb-3"><i class="bi bi-robot text-accent me-2"></i> AI-Powered Extraction</li>
+        <li class="mb-3"><i class="bi bi-lightning-charge text-accent me-2"></i> Fast & Accurate Analysis</li>
+      </ul>
+    </div>
+    
+    <div class="split-right">
+      <div style="max-width: 480px; width: 100%; margin: 0 auto; padding-top: 2rem; padding-bottom: 2rem;">
+        <h3 class="playfair fw-bold mb-2">Create Your Account</h3>
+        <p class="text-muted mb-4">Join LexAI and transform your legal review workflow.</p>
+        
+        <form id="register-form">
+          <div class="mb-3">
+            <label class="form-label fw-medium">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="John Doe" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label fw-medium">Email Address</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="name@company.com" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label fw-medium">Organization / Law Firm <span class="text-muted fw-normal">(optional)</span></label>
+            <input type="text" class="form-control" placeholder="Acme Corp">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label fw-medium d-block">I am a...</label>
+            <div class="btn-group w-100" role="group">
+              <input type="radio" class="btn-check" name="role" id="role1" autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="role1">Lawyer</label>
+              <input type="radio" class="btn-check" name="role" id="role2" autocomplete="off">
+              <label class="btn btn-outline-primary" for="role2">Paralegal</label>
+              <input type="radio" class="btn-check" name="role" id="role3" autocomplete="off">
+              <label class="btn btn-outline-primary" for="role3">Legal Tech</label>
+              <input type="radio" class="btn-check" name="role" id="role4" autocomplete="off">
+              <label class="btn btn-outline-primary" for="role4">Other</label>
+            </div>
+          </div>
+          
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Password</label>
+              <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required>
+              <div class="password-strength-bar">
+                <div id="password-strength-fill" class="password-strength-fill"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-medium">Confirm Password</label>
+              <input type="password" id="reg-confirm-password" class="form-control" placeholder="••••••••" required>
+            </div>
+          </div>
+          
+          <div class="mb-4 form-check">
+            <input type="checkbox" class="form-check-input" id="terms" required>
+            <label class="form-check-label small text-muted" for="terms">I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a></label>
+          </div>
+          
+          <button type="submit" id="register-btn" class="btn btn-primary w-100 py-2 mb-4">Create Account →</button>
+        </form>
+        
+        <div class="text-center">
+          <p class="text-muted small">Already have an account? <a href="login.html" class="fw-bold text-decoration-none">Sign in</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="js/app.js"></script>
+</body>
+</html>

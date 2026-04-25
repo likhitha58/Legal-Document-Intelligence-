@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Viewer - LexAI</title>
+  
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="../css/styles.css" rel="stylesheet">
+</head>
+<body class="page-fade">
+
+  <!-- 4.1 Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="sidebar-brand playfair">
+      <img src="../assets/logo.svg" alt="LexAI" width="24" height="24" class="text-white">
+      LexAI
+    </a>
+    <ul class="sidebar-nav">
+      <li><a href="dashboard.html" class="sidebar-nav-item" data-page="dashboard.html"><i class="bi bi-house-door"></i> Dashboard</a></li>
+      <li><a href="upload.html" class="sidebar-nav-item" data-page="upload.html"><i class="bi bi-cloud-arrow-up"></i> Upload Document</a></li>
+      <li><a href="history.html" class="sidebar-nav-item" data-page="history.html"><i class="bi bi-file-earmark-text"></i> My Documents</a></li>
+      <li><a href="qa-chat.html" class="sidebar-nav-item" data-page="qa-chat.html"><i class="bi bi-chat-quote"></i> Q&A Chat</a></li>
+      <li><a href="clause-view.html" class="sidebar-nav-item" data-page="clause-view.html"><i class="bi bi-tags"></i> Clause Browser</a></li>
+      <li><a href="history.html" class="sidebar-nav-item" data-page="history.html"><i class="bi bi-clock-history"></i> History</a></li>
+      <li><a href="profile.html" class="sidebar-nav-item" data-page="profile.html"><i class="bi bi-person"></i> Profile</a></li>
+    </ul>
+    <div class="mt-auto">
+      <a href="profile.html" class="sidebar-nav-item" data-page="settings"><i class="bi bi-gear"></i> Settings</a>
+      <div class="sidebar-footer">
+        <div class="sidebar-avatar">AJ</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Alex Johnson</div>
+          <span class="sidebar-badge">Free Plan</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- 4.2 Top Navbar -->
+    <header class="topbar">
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-sm btn-outline-secondary d-md-none" type="button" onclick="document.getElementById('sidebar').classList.toggle('show')">
+          <i class="bi bi-list"></i>
+        </button>
+        <span class="topbar-breadcrumb">Dashboard / Document Viewer</span>
+      </div>
+      <div class="topbar-actions">
+        <i class="bi bi-search" style="cursor:pointer;"></i>
+        <div class="notification-bell">
+          <i class="bi bi-bell"></i>
+          <span class="notification-badge">3</span>
+        </div>
+        <div class="dropdown">
+          <div class="sidebar-avatar" style="width:32px; height:32px; cursor:pointer;" data-bs-toggle="dropdown">AJ</div>
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person me-2"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="profile.html"><i class="bi bi-gear me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="../index.html"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="dashboard-container">
+      
+      <div class="row g-4">
+        <!-- Left Column (65%) -->
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom pb-3">
+              <h5 class="fw-bold mb-2">📄 Extracted Document Text</h5>
+              <div class="d-flex flex-wrap gap-3 small text-muted monospace">
+                <span><i class="bi bi-file-pdf text-danger"></i> Software_License_Agreement_2024.pdf</span>
+                <span>|</span>
+                <span>14,280 chars</span>
+                <span>|</span>
+                <span>28 chunks</span>
+                <span>|</span>
+                <span>Processed: Today</span>
+              </div>
+            </div>
+            <div class="card-body position-relative p-0">
+              <!-- Floating action button -->
+              <button class="btn btn-primary rounded-pill position-absolute top-0 end-0 m-3 shadow z-2" onclick="alert('Search feature activated')">
+                <i class="bi bi-search me-1"></i> Search in document
+              </button>
+              
+              <!-- Text Area -->
+              <div class="doc-text-container border-0 rounded-0" id="document-text-container">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column (35%) -->
+        <div class="col-lg-4">
+          
+          <!-- Card D - Quick Actions -->
+          <div class="card border-0 shadow-sm mb-4 bg-primary text-white">
+            <div class="card-body">
+              <h6 class="fw-bold mb-3"><i class="bi bi-lightning-charge me-2 text-accent"></i> Quick Actions</h6>
+              <div class="d-grid gap-2">
+                <a href="qa-chat.html" class="btn btn-light fw-bold text-primary"><i class="bi bi-chat-quote me-2"></i> Ask a Question</a>
+                <a href="clause-view.html" class="btn btn-outline-light"><i class="bi bi-tags me-2"></i> View Clause Highlights</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card A - Document Info -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-bottom fw-bold">
+              Document Details
+            </div>
+            <div class="card-body small">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">File Name</span>
+                <span class="fw-medium">Software_License_Agreement_2024.pdf</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Size</span>
+                <span class="fw-medium">2.4 MB</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Upload Date</span>
+                <span class="fw-medium">Today, 10:42 AM</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">Processing Time</span>
+                <span class="fw-medium">4.2 seconds</span>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary w-50"><i class="bi bi-download me-1"></i> Download</button>
+                <button class="btn btn-sm btn-outline-secondary w-50" disabled><i class="bi bi-share me-1"></i> Share</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card B - Detected Clause Summary -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-bottom fw-bold d-flex justify-content-between align-items-center">
+              <span>Detected Clauses</span>
+              <span class="badge bg-primary rounded-pill">8 Types</span>
+            </div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Termination</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Confidentiality</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Payment Terms</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Governing Law</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Indemnification</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Warranties</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Assignment</span>
+                <span class="badge bg-secondary bg-opacity-10 text-dark border">Data Protection</span>
+              </div>
+              <a href="clause-view.html" class="btn btn-sm btn-outline-primary w-100">View All Clauses →</a>
+            </div>
+          </div>
+
+          <!-- Card C - Named Entities Summary -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom fw-bold">
+              Named Entities Extracted
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-sm table-hover small mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="ps-3">Type</th>
+                    <th>Count</th>
+                    <th class="pe-3">Examples</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="ps-3"><span class="badge text-bg-primary">PERSON</span></td>
+                    <td>3</td>
+                    <td class="text-truncate" style="max-width: 120px;" title="John Smith, Sarah Lee">John Smith, Sarah Lee</td>
+                  </tr>
+                  <tr>
+                    <td class="ps-3"><span class="badge text-bg-success">ORG</span></td>
+                    <td>5</td>
+                    <td class="text-truncate" style="max-width: 120px;" title="Acme Corp, TechSoft Inc">Acme Corp, TechSoft Inc</td>
+                  </tr>
+                  <tr>
+                    <td class="ps-3"><span class="badge text-bg-warning">DATE</span></td>
+                    <td>8</td>
+                    <td class="text-truncate" style="max-width: 120px;" title="January 1 2024, 30 days">January 1 2024, 30 days</td>
+                  </tr>
+                  <tr>
+                    <td class="ps-3"><span class="badge text-bg-info text-white">GPE</span></td>
+                    <td>2</td>
+                    <td class="text-truncate" style="max-width: 120px;" title="California, United States">California, United States</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bootstrap 5.3 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="../js/app.js"></script>
+</body>
+</html>
