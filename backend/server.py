@@ -15,6 +15,32 @@ from dotenv import load_dotenv
 # Add parent directory to path to import from root
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+def load_large_json(filepath):
+    """Load large JSON array file with streaming to avoid MemoryError"""
+    print(f"Loading {filepath} with streaming parser...")
+    try:
+        import ijson
+        records = []
+        with open(filepath, 'rb') as f:
+            for obj in ijson.items(f, 'item'):
+                records.append(obj)
+                if len(records) % 1000 == 0:
+                    print(f"  Loaded {len(records)} records...")
+        return pd.DataFrame(records)
+    except ImportError:
+        # Fallback: manual parsing
+        print("  ijson not available, using manual parser...")
+        records = []
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+            # Parse JSON array manually
+            data = json.loads(content)
+            if isinstance(data, list):
+                records = data
+            else:
+                records = [data]
+        return pd.DataFrame(records)
+
 # Load classes from demo_rag_engine
 from demo_rag_engine import SemanticSearch, RAGPipeline
 
@@ -60,7 +86,7 @@ def init_rag():
 
     # 1. Load Data
     embeddings = np.load(emb_path).astype("float32")
-    df_chunks = pd.read_json(nlp_path, orient="records")
+    df_chunks = load_large_json(nlp_path)
     
     with open(cfg_path) as f:
         nlp_config = json.load(f)
@@ -90,12 +116,12 @@ def init_rag():
         try:
             import google.generativeai as genai
             genai.configure(api_key=api_key)
-            gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+            gemini_model = genai.GenerativeModel("gemini-2.5-flash")
             
             def call_llm(p):
                 try:
                     res = gemini_model.generate_content(p).text
-                    return res, "Gemini 1.5 Flash (Online)"
+                    return res, "Gemini 2.5 Flash (Online)"
                 except Exception as e:
                     print(f"Gemini failed: {e}. Falling back...")
                     return call_offline(p)

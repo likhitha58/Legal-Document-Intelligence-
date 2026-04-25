@@ -38,6 +38,8 @@ legal_data_cleaned.csv
 legal_data_cleaned.json
 df_final_with_nlp.json
 chunk_embeddings.npy
+legal_faiss.index
+legal_chroma_db/
 sample_legal_contract.pdf
 
 # Reports & Logs
@@ -45,6 +47,7 @@ sample_legal_contract.pdf
 *.md~
 ner_extraction_report.json
 embedding_evaluation_report.md
+rag_evaluation_report.md
 nlp_model_config.json
 
 # Generated Plots
@@ -78,12 +81,14 @@ models/
 *.pt
 *.pth
 
-
 data/data.zip
 
 # OS
-.DS_Store
 Thumbs.db
+
+# App runtime data
+backend/uploads/
+uploads/
 
 # Environment variables
 .env
